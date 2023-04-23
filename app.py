@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def pagina_inicial():
-    return "FIAP-09ASO-GRUPO3-BOTA-FE"
+    return "labdevops-9aso-grupo31"
 
 if __name__ == '__main__':
     app.run()

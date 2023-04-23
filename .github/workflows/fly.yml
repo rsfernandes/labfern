@@ -5,18 +5,34 @@ name: DevOpsLab Pipeline
 on: 
   push:
     branches:
-      - 04-Deploy
+      - main
+
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
         with:
           python-version: '3'
-      - run:  pip install flask
-      - run: python -m unittest -v test
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install Requirements
+        run:  pip install flask
+
+      - name: Unit Test
+        run: python -m unittest -v test
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   Deploy: 
     name: Deploy_app

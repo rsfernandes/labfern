@@ -31,7 +31,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  Deploy: 
+      - name: Docker Login
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > key.json
+          cat key.json | docker login -u _json_key --password-stdin '${{ vars.GOOGLE_ARTIFACT }}'
+
+      - name: Build & Push Image
+        run: |
+          docker build -t ${{ vars.GOOGLE_ARTIFACT }}/${{ vars.GOOGLE_PROJECT_ID }}/${{ vars.GOOGLE_REPONAME }}/${{ vars.GOOGLE_MYAPP }}:latest .
+          docker push ${{ vars.GOOGLE_ARTIFACT }}/${{ vars.GOOGLE_PROJECT_ID }}/${{ vars.GOOGLE_REPONAME }}/${{ vars.GOOGLE_MYAPP }}:latest
+
+  Deploy:
     name: Deploy_app
     needs: Build
     runs-on: ubuntu-latest
@@ -49,16 +59,26 @@ jobs:
       - run: flyctl status -t $FLY_API_TOKEN -a labdevops-9aso-grupo31
       #- run: flyctl deploy --remote-only
       #- run: flyctl ips allocate-v4 --shared 
+
+      - name: Auth GCP
+        uses: 'google-github-actions/auth@v1' # https://github.com/google-github-actions/auth
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+      - name: Cloud Run Deploy
+        id: deploy
+        run: |-
+          gcloud run deploy ${{ vars.GOOGLE_MYAPP }} \
+            --quiet \
+            --region  ${{ vars.GOOGLE_REGION }} \
+            --image ${{ vars.GOOGLE_ARTIFACT }}/${{ vars.GOOGLE_PROJECT_ID }}/${{ vars.GOOGLE_REPONAME }}/${{ vars.GOOGLE_MYAPP }}:latest \
+            --platform managed \
+            --allow-unauthenticated \
+            --project ${{ vars.GOOGLE_PROJECT_ID }} \
+            --format json
+
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      # Adicionando o Repositório Remoto do Heroku para poder enviar o código da app
-      #- name: Add Heroku Remote
-      #  run: heroku git:remote --app $HEROKU_APP_NAME
-      #  env:
-      #      HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
 
-      # Enviando o código da App para o Heroku fazer Deploy
-      #- name: Push to Heroku & Deploy
-      #  run: git push heroku HEAD:main --force
 
       #Grupo31

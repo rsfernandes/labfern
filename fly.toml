@@ -6,8 +6,8 @@ kill_timeout = 5
 
 #primary_region = "gru"
 
-[build]
-  builder = "paketobuildpacks/builder:base"
+[#build]
+  #builder = "paketobuildpacks/builder:base"
 
 [[services]]
   internal_port = 8080
@@ -25,7 +25,7 @@ kill_timeout = 5
     handlers = ["tls", "http"]
     port = "443"
 
-  [[services.tcp_checks]]
-    interval = 10000
-    timeout = 2000
-    #Avanco
+  #[[services.tcp_checks]]
+  #  interval = 10000
+  #  timeout = 2000
+  #  #Avanco

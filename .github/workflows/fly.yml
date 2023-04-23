@@ -32,7 +32,7 @@ jobs:
       # Autenticando fly.io
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy #--remote-only
+      - run: flyctl deploy --remote-only
       - run: flyctl status -t $FLY_API_TOKEN -a labdevops-9aso-grupo31
       #- run: flyctl deploy --remote-only
       #- run: flyctl ips allocate-v4 --shared 

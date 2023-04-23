@@ -28,3 +28,4 @@ primary_region = "gru"
   [[services.tcp_checks]]
     interval = 10000
     timeout = 2000
+    #Avanco

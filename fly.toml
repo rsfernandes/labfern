@@ -1,0 +1,13 @@
+# fly.toml file generated on 2023-04-23T01:05:01Z
+
+app = "labdevops-9aso-group31"
+kill_signal = "SIGINT"
+kill_timeout = 0
+
+primary_region = "gru"
+
+[build]
+  builder = "paketobuildpacks/builder:base"
+
+[env]
+  PORT = "8080"

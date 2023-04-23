@@ -28,21 +28,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Autenticação do Heroku CLI via API TOKEN
-      # https://devcenter.heroku.com/articles/authentication
-      #- name: Heroku Login
-      #  run: | 
-      #      cat > ~/.netrc <<EOF
-      #        machine api.heroku.com
-      #          login $HEROKU_EMAIL
-      #          password $HEROKU_API_KEY
-      #        machine git.heroku.com
-      #          login $HEROKU_EMAIL
-      #          password $HEROKU_API_KEY
-      #      EOF
-      #  env:
-      #      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      #      HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
 
       # Autenticando fly.io
       - uses: actions/checkout@v3

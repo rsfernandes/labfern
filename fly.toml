@@ -1,31 +1,30 @@
-# fly.toml file generated on 2023-04-23T01:05:01Z
+# fly.toml app configuration file generated for labdevops-9aso-grupo31 on 2023-04-23T18:23:05Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "labdevops-9aso-grupo31"
+primary_region = "gru"
 kill_signal = "SIGINT"
 kill_timeout = 5
-
-#primary_region = "gru"
 
 [build]
   builder = "paketobuildpacks/builder:base"
 
-[[services]]
-  internal_port = 8080
-  protocol = "tcp"
+[env]
+  PORT = "8080"
 
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
-
-  [[services.ports]]
-    handlers = ["http"]
-    port = "80"
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = "443"
-
-  #[[services.tcp_checks]]
-  #  interval = 10000
-  #  timeout = 2000
-  #  #Avanco

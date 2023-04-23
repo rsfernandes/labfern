@@ -1,0 +1,48 @@
+# Nome do Workflow
+name: DevOpsLab Pipeline
+
+# Evento que irá acionar a pipeline
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3'
+      - run:  pip install flask
+      - run: python -m unittest -v test
+
+  Deploy: 
+    name: Deploy_app
+    needs: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+
+      # Autenticando fly.io
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy
+      #- run: flyctl deploy --remote-only
+      #- run: flyctl ips allocate-v4 --shared 
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      # Adicionando o Repositório Remoto do Heroku para poder enviar o código da app
+      #- name: Add Heroku Remote
+      #  run: heroku git:remote --app $HEROKU_APP_NAME
+      #  env:
+      #      HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+
+      # Enviando o código da App para o Heroku fazer Deploy
+      #- name: Push to Heroku & Deploy
+      #  run: git push heroku HEAD:main --force

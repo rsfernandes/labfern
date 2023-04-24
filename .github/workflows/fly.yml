@@ -44,7 +44,7 @@ jobs:
   Deploy-Homolog:
     needs: Build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3 # https://github.com/actions/checkout
@@ -65,7 +65,7 @@ jobs:
       - name: Test Homolog
         run: 'curl "${{ steps.homolog-deploy.outputs.url }}"'
 
-Deploy-Production:
+  Deploy-Production:
     needs: Deploy-Homolog
     runs-on: ubuntu-latest
 
@@ -88,5 +88,3 @@ Deploy-Production:
 
       - name: Test Prod
         run: 'curl "${{ steps.prod-deploy.outputs.url }}"'
-
-      #Grupo31

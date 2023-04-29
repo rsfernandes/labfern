@@ -2,7 +2,7 @@
 FROM python:rc-slim
 
 ### instalando pacotes necessarios
-RUN apt-get update && apt-get install procps iproute2 curl nc -y
+RUN apt-get update && apt-get install procps iproute2 curl -y
 
 # Instalar as dependências de Python de acordo com o que foi desenvolvido na aplicação e que está declarado no arquivo requirements.txt.
 RUN pip install --trusted-host pypi.python.org -r requirements.txt

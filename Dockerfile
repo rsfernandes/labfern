@@ -17,4 +17,4 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 EXPOSE 8080
 
 # Garante que será iniciado a aplicação.
-CMD ["gunicorn", "app:app"]
+CMD ["gunicorn", "-b", ":8080", "app:app"]
